@@ -19,7 +19,7 @@ public class Main {
     }
 
     static void menu(){
-
+        clear();
         do {
 
             System.out.println("Enter an option below: \n1. Enter shifts. \n2. See shifts. \n3. Search shift. \n4. Exit"    );
@@ -67,6 +67,15 @@ public class Main {
 
     }
 
+    public static void clear() {
+
+        for (int i = 0; i < 25; i++) {
+
+            System.out.println();
+            
+        }
+    }
+
     public static void newShift() {
 
         System.out.println("Enter the name: ");
@@ -85,15 +94,63 @@ public class Main {
 
         Shift shift = new Shift(day,id, patient);
 
-        System.out.println("shift.getDay() = " + shift.getDay());
-        //shifts.
+        confirmShift(shift);
+        
+        while (!approved) {
 
+            System.out.println("Try another day: ");
+            day = Integer.parseInt(sc.nextLine());
+            shift.setDay(day);
+            confirmShift(shift);
+        }
+
+
+        clear();
         menu();
+    }
+
+    public static boolean confirmShift(Shift shift) {
+
+
+        if(shifts != null) {
+
+            for (int i = 0; i <shifts.length; i++) {
+
+                if((shifts[i].getDay()) != shift.getDay()) {
+
+                    approved = true;
+                    shifts[0] = new Shift(shift);
+                    System.out.println("The shift has been confirmed!");
+                }
+                else {
+
+                    approved = false;
+                }
+            }
+
+        }
+        else {
+
+            approved = true;
+            shifts[0] = new Shift(shift);
+            System.out.println("The shift has been confirmed!");
+        }
+
+        return approved;
     }
 
     public static void displayShifts() {
 
+        for (int i = 0; i < shifts.length; i++) {
 
+            if (shifts[i] != null) {
+                System.out.println("Patient: " + shifts[i].getPatient().getName() + " " + shifts[i].getPatient().getLastname());
+                System.out.println("Id: " + shifts[i].getId());
+                System.out.println("Day: " + shifts[i].getDay());
+
+
+            }
+        }
     }
 
     public static void searchShifts() {
@@ -102,8 +159,10 @@ public class Main {
     }
 
     static int option;
-    static Patient[] patients;
-    public static Shift[] shifts;
+    public static Patient[] patients = new Patient[1000];
+    public static Shift[] shifts = new Shift[1000];
     public static Scanner sc = new Scanner(System.in);
+
+    public static boolean approved;
 
 }

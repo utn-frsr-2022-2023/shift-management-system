@@ -37,4 +37,11 @@ public class Shift {
         this.day = day;
         this.id = id;
     }
+
+    public Shift(Shift shift) {
+
+        this.patient = shift.patient;
+        this.day = shift.day;
+        this.id = shift.id;
+    }
 }
