@@ -2,10 +2,9 @@ package system.models;
 
 public class Shift {
 
-    int day;
-    int id;
-
-    Patient patient;
+    private int day;
+    private int id;
+    private Person person;
 
     public int getDay() {
         return day;
@@ -23,25 +22,19 @@ public class Shift {
         this.id = id;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
-    public Shift(int day, int id, Patient patient) {
+    public Shift(int day, int id, Person person) {
 
-        this.patient = patient;
+        this.person = person;
         this.day = day;
         this.id = id;
     }
 
-    public Shift(Shift shift) {
-
-        this.patient = shift.patient;
-        this.day = shift.day;
-        this.id = shift.id;
-    }
 }

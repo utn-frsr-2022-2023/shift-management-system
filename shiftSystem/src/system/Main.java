@@ -1,8 +1,10 @@
 package system;
 
-import system.models.Patient;
+import system.models.Person;
 import system.models.Shift;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -42,28 +44,26 @@ public class Main {
 
     static void welcome() {
 
-        int menu;
-        //Scanner sc = new Scanner(System.in);
-
         // FRONT //
         System.out.println("--------------------------------------------------------");
         System.out.println("\t\t\t\tWelcome to the shift system");
         System.out.println("--------------------------------------------------------");
 
-        System.out.println("  ___\n" +
-                "   //_\\\\_\n" +
-                " .\"\\\\    \".\n" +
-                "/          \\\n" +
-                "|           \\_\n" +
-                "|       ,--.-.)\n" +
-                " \\     /  o \\o\\\n" +
-                " /\\/\\  \\    /_/\n" +
-                "  (_.   `--'__)\n" +
-                "   |     .-'  \\\n" +
-                "   |  .-'.     )\n" +
-                "   | (  _/--.-'\n" +
-                "   |  `.___.'\n" +
-                "         (");
+        System.out.println("""
+                  ___
+                   //_\\\\_
+                 ."\\\\    ".
+                /          \\
+                |           \\_
+                |       ,--.-.)
+                 \\     /  o \\o\\
+                 /\\/\\  \\    /_/
+                  (_.   `--'__)
+                   |     .-'  \\
+                   |  .-'.     )
+                   | (  _/--.-'
+                   |  `.___.'
+                         (""");
 
     }
 
@@ -90,67 +90,101 @@ public class Main {
         System.out.println("Enter the day: ");
         int day = Integer.parseInt(sc.nextLine());
 
-        Patient patient = new Patient(name, lastname, id);
+        // Instancia de persona
+        Person person = new Person(name, lastname, id);
+        // Agregar a la persona a la base de datos.
+        people.add(person);
 
-        Shift shift = new Shift(day,id, patient);
+        // Instancia de turno.
+        Shift shift = new Shift(day,id, person);
+        // Agregar el turno a la base de datos.
+        shifts.add(shift);
 
-        confirmShift(shift);
-        
-        while (!approved) {
+        //Llamado a la funcion para confirmar el turno.
+        //confirmShift(shift, person);
+
+        // A modular.
+        /*while (!approved) {
 
             System.out.println("Try another day: ");
             day = Integer.parseInt(sc.nextLine());
             shift.setDay(day);
-            confirmShift(shift);
-        }
+            confirmShift(shift, person);
+        }*/
 
 
         clear();
         menu();
     }
 
-    public static boolean confirmShift(Shift shift) {
+    public static void confirmShift(Shift shift, Person person) {
+
+        int day, day2;
 
 
-        if(shifts != null) {
+        //Si el Arraylist esta vacío el turno es insertado.
+        if(shifts == null) {
 
-            for (int i = 0; i <shifts.length; i++) {
+            approved = true;
 
-                if((shifts[i].getDay()) != shift.getDay()) {
+            System.out.println("The shift has been confirmed!");
 
+
+        }
+        else {
+
+            for (int i = 0; i < shifts.size(); i++) {
+
+                day = shifts.get(i).getDay();
+
+                day2 = shift.getDay();
+
+
+
+                if(day != day2) {
                     approved = true;
-                    shifts[0] = new Shift(shift);
+                    shifts.add(shift);
                     System.out.println("The shift has been confirmed!");
+                    break;
+
                 }
                 else {
 
                     approved = false;
                 }
+
+
             }
-
-        }
-        else {
-
-            approved = true;
-            shifts[0] = new Shift(shift);
-            System.out.println("The shift has been confirmed!");
         }
 
-        return approved;
     }
 
     public static void displayShifts() {
 
-        for (int i = 0; i < shifts.length; i++) {
+        int x = shifts.size();
 
-            if (shifts[i] != null) {
-                System.out.println("Patient: " + shifts[i].getPatient().getName() + " " + shifts[i].getPatient().getLastname());
-                System.out.println("Id: " + shifts[i].getId());
-                System.out.println("Day: " + shifts[i].getDay());
+        if (x > 0 ) {
 
+                System.out.println("#######################################################################");
+                System.out.format("%15s %15s %10s %10s", "NAME", "LASTNAME", "ID", "SHIFT");
+                System.out.println();
+                System.out.println("#######################################################################");
+                for (Shift shift : shifts) {
 
-            }
+                    System.out.format("%15s %15s %10d %10c",
+                            (shift.getPerson().getName()), (shift.getPerson().getLastname()),
+                            (shift.getPerson().getId()), (shift.getDay()));
+                    System.out.println();
+
+                }
+                System.out.println("#######################################################################");
         }
+        else {
+
+            System.out.println("There's no shifts yet.");
+        }
+
+        menu();
     }
 
     public static void searchShifts() {
@@ -159,10 +193,9 @@ public class Main {
     }
 
     static int option;
-    public static Patient[] patients = new Patient[1000];
-    public static Shift[] shifts = new Shift[1000];
+    public static List<Person> people = new ArrayList<>();
+    public static List<Shift> shifts = new ArrayList<>();
     public static Scanner sc = new Scanner(System.in);
-
     public static boolean approved;
 
 }

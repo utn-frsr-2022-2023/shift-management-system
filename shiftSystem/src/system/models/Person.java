@@ -1,6 +1,6 @@
 package system.models;
 
-public class Patient {
+public class Person {
 
     private String name;
     private String lastname;
@@ -30,7 +30,7 @@ public class Patient {
         this.id = id;
     }
 
-    public Patient(String name, String lastname, int id) {
+    public Person(String name, String lastname, int id) {
 
         this.name = name;
         this.lastname = lastname;
