@@ -30,6 +30,8 @@ public class Person {
         this.id = id;
     }
 
+    public Person() {};
+
     public Person(String name, String lastname, int id) {
 
         this.name = name;
