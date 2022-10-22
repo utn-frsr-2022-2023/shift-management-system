@@ -194,6 +194,25 @@ public class PersonService {
         }
 
     }
+
+    public int getIndex(int id) {
+
+        int r = -1;
+
+        for (int i = 0; i < personsList.size(); i++) {
+
+            if (id == personsList.get(i).getId()) {
+
+                r = i;
+                break;
+            }
+            else if (i == personsList.size()-1){
+                System.err.println("The id doesn't exists!");
+            }
+        }
+
+        return r;
+    }
     public static List<Person> personsList = new ArrayList<>();
     public static void loadList() {
 

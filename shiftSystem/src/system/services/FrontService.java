@@ -1,31 +1,10 @@
-package system;
+package system.services;
 
-import system.models.Person;
-import system.models.Shift;
-import system.services.FrontService;
-import system.services.PersonService;
-import system.services.ShiftService;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class FrontService {
 
-    /*------------------------------------------------------------MAIN------------------------------------------------------------*/
-
-    public static void main(String[] args) {
-
-        //welcome(); // Muestra el cartel de bienvenida.
-
-        getData(); // Trae los datos desde services.
-
-        frontService.menu(); // Muestra el menu.
-
-    }
-    
-    // FRONT //
-    static void welcome() {
+    public  void welcome() {
 
         // FRONT //
         System.out.println("""
@@ -48,9 +27,9 @@ public class Main {
         System.out.println("\t\t\t\tWelcome to the shift system");
         System.out.println("######################################################################");
         System.out.print("\nPress 1 to continue: ");
-        int x = Integer.parseInt(sc.nextLine());
+        option = sc.nextInt();
     }
-    public static void menu(){
+    public  void menu(){
         //clear();
         do {
 
@@ -74,10 +53,10 @@ public class Main {
             case 1: shiftService.displayShifts();
                 break;
 
-            case 2: personService.displayPeople(people);
+            case 2: personService.displayPeople(personService.getPersons());
                 break;
 
-            case 3: shiftService.addShift(people);
+            case 3: shiftService.addShift(personService.getPersons());
                 break;
 
             case 4: personService.addPeople();
@@ -85,19 +64,19 @@ public class Main {
             case 5: shiftService.updateShift();
                 break;
 
-            case 6: personService.updatePeople(people);
+            case 6: personService.updatePeople(personService.getPersons());
                 break;
 
             case 7: shiftService.deleteShift();
                 break;
 
-            case 8: personService.deletePeople(people);
+            case 8: personService.deletePeople(personService.getPersons());
                 break;
 
             case 9: shiftService.searchShifts();
                 break;
 
-            case 10 : personService.searchPeople(people);
+            case 10 : personService.searchPeople(personService.getPersons());
                 break;
 
             case 11: break;
@@ -105,7 +84,7 @@ public class Main {
         }
     }
 
-    public static void submenu() {
+    public  void submenu() {
 
 
         int option;
@@ -128,29 +107,18 @@ public class Main {
         }
     }
 
-    public static void clear() {
+    public  void clear() {
 
         for (int i = 0; i < 25; i++) {
 
             System.out.println();
-            
+
         }
     }
-    
-    // BACK //
-    public static void getData() {
 
-        people = personService.getPersons();
+    private static int option;
+    private static final Scanner sc = new Scanner(System.in);
 
-        shifts = shiftService.getShifts();
-    }
-    static int option;
-    public static List<Person> people = new ArrayList<>();
-    public static List<Shift> shifts = new ArrayList<>();
-    public static Scanner sc = new Scanner(System.in);
     private static final PersonService personService = new PersonService();
     private static final ShiftService shiftService = new ShiftService();
-
-    private static FrontService frontService = new FrontService();
-
 }
