@@ -1,22 +1,23 @@
 package system.services;
 
-import system.Main;
 import system.models.Person;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class PersonService {
 
     public List<Person>getPersons() {
 
-        loadList();
-        return  personsList;
+        return peopleList;
     }
     public  void addPeople() {
 
 
         Person person = new Person();
+
 
         System.out.print("Enter the name: ");
         person.setName(sc.nextLine());
@@ -27,35 +28,70 @@ public class PersonService {
         System.out.print("Enter the identification number: ");
         person.setId(Integer.parseInt(sc.nextLine()));
 
+        System.out.print("Enter the phone number: ");
+        person.setPhone(Long.parseLong(sc.nextLine()));
+
+        System.out.print("Enter the email: ");
+        person.setEmail(sc.nextLine());
+
+
+
         // Llamado a la funcion para confirmar a la persona.
         confirmPeople(person);
 
-        //clear();
-        Main.menu();
-    }
-    public  void updatePeople(List<Person> people){
+        frontService.submenu();
 
-        Scanner sc = new Scanner(System.in);
+    }
+    public  void updatePeople(){
+
+        Person personToUpdate;
+        int indexToUpdate;
+
         System.out.print("Enter the identification number: ");
         int id = Integer.parseInt(sc.nextLine());
 
-        Person personToUpdate = new Person();
+        List <Person> listForUpdates;
 
 
-        for (int i = 0; i < people.size(); i++) {
+        listForUpdates = peopleList.stream()
+                .filter(person -> person.getId() == id)
+                .collect(Collectors.toList());
 
-            if (id == (people.get(i).getId())) {
+        frontService.clear();
 
-                personToUpdate = people.get(i);
 
-            }
+        if(listForUpdates.size() > 1) {
+
+            System.out.println("There's " + listForUpdates.size() + " people founded with the same id: ");
+
+            listForUpdates.forEach(p -> {
+                System.out.println("\n**************************************************");
+                System.out.println("Name: " + p.getName());
+                System.out.println("Lastname: " + p.getLastname());
+                System.out.println("**************************************************");
+            });
+
+            System.out.println("Enter the actual name: ");
+            String name = sc.nextLine();
+            System.out.println("Enter the actual name: ");
+            String lastname = sc.nextLine();
+
+            personToUpdate = new Person(name, lastname, id);
+
+
+
+
+        } else {
+
+            personToUpdate = listForUpdates.get(0);
 
         }
 
-        System.out.print("Enter the name: ");
+        System.out.print("Enter the new name: ");
         personToUpdate.setName(sc.nextLine());
 
-        System.out.print("Enter the lastname: ");
+
+        System.out.print("Enter the new lastname: ");
         personToUpdate.setLastname(sc.nextLine());
 
         System.out.println("The person has been updated!");
@@ -64,11 +100,10 @@ public class PersonService {
         int option = Integer.parseInt(sc.nextLine());
 
         if (option == 1)
-            Main.menu();
-    }
-    public  void deletePeople(List<Person> people) {
+            frontService.menu();
 
-        //Scanner sc = new Scanner(System.in);
+    }
+    public  void deletePeople() {
 
         Person personToRemove = new Person();
 
@@ -81,16 +116,17 @@ public class PersonService {
         System.out.print("Enter the identification number: ");
         personToRemove.setId(Integer.parseInt(sc.nextLine()));
 
-        for (int i = 0; i < people.size(); i++) {
+        for (int i = 0; i < peopleList.size(); i++) {
 
-            if (personToRemove.getName().equals(people.get(i).getName()) || personToRemove.getLastname().equals(people.get(i).getLastname()) || personToRemove.getId() == (people.get(i).getId())) {
+            if (personToRemove.getName().equals(peopleList.get(i).getName()) || personToRemove.getLastname().equals(peopleList.get(i).getLastname()) || personToRemove.getId() == (peopleList.get(i).getId())) {
 
-                people.remove(i);
+                peopleList.remove(i);
+                System.out.println();
                 System.out.println("The person has been deleted!");
                 break;
 
 
-            } else if (i == people.size()-1) {
+            } else if (i == peopleList.size()-1) {
 
                 System.out.println("The person couldn't be found.");
                 System.out.println("Press 1 to try again.");
@@ -99,9 +135,9 @@ public class PersonService {
                 int option = Integer.parseInt(sc.nextLine());
 
                 if (option == 1) {
-                    deletePeople(people);
+                    deletePeople();
                 } else if (option == 2) {
-                    Main.menu();
+                    frontService.menu();
                 }
                 else {
                     break;
@@ -109,72 +145,73 @@ public class PersonService {
 
             }
         }
-
-
-        //clear();
-        Main.menu();
+        frontService.submenu();
     }
     public  void confirmPeople(Person person) {
 
-        if( personsList.contains(person)) {
+
+
+        if(peopleList.stream().anyMatch(p -> p.getId() == person.getId() && p.getName().equalsIgnoreCase(person.getName()) && p.getLastname().equalsIgnoreCase(person.getLastname()))){
 
             System.out.println("The user already exists! \nTry again...");
             addPeople();
         }
         else {
 
-            personsList.add(person);
-            System.out.println("The user has been added successflly!");
+            peopleList.add(person);
+            System.out.println();
+            System.out.println("The user has been added successfully!");
+            System.out.println();
         }
 
     }
-    public  void displayPeople(List<Person> people){
+    public  void displayPeople(){
 
-        if ( people.isEmpty() ) {
+        if ( peopleList.isEmpty() ) {
 
-            System.out.println("There's no people yet.");
+            System.out.println("The database is empty.");
 
         }
         else {
 
-            System.out.println("**************************************************");
-            System.out.printf("%7s %20s %20s", "ID", "NAME", "LASTNAME");
+            System.out.println("****************************************************************************************************");
+            System.out.printf("%7s %15s %20s %20s %25s", "ID", "NAME", "LASTNAME", "PHONE", "EMAIL");
             System.out.println();
-            System.out.println("**************************************************");
-            for (Person p : people) {
-                System.out.format("%7s %20s %20s",
-                        p.getId(), p.getName(), p.getLastname());
+            System.out.println("****************************************************************************************************");
+            for (Person p : peopleList) {
+                System.out.format("%10s %15s %20s %20s %25s",
+                        p.getId(), p.getName(), p.getLastname(), p.getPhone(), p.getEmail());
                 System.out.println();
+                System.out.println("****************************************************************************************************");
             }
-            System.out.println("**************************************************");
-        }
-        Main.submenu();
-    }
-    public  void searchPeople(List<Person> people) {
 
-        Scanner sc = new Scanner(System.in);
+        }
+        frontService.submenu();
+    }
+    public  void searchPeople() {
+
         System.out.print("Enter the identification number: ");
         int id = Integer.parseInt(sc.nextLine());
 
-        Person foundedPerson = new Person();
+        Person foundedPerson;
 
+        /*
+        for (int i = 0; i < peopleList.size(); i++) {
 
-        for (int i = 0; i < people.size(); i++) {
+            if (id == (peopleList.get(i).getId())) {
 
-            if (id == (people.get(i).getId())) {
-
-                foundedPerson = people.get(i);
+                foundedPerson = peopleList.get(i);
 
                 System.out.println("************************************************************");
                 System.out.println("Id: " + id);
                 System.out.println("Name: " + foundedPerson.getName());
                 System.out.println("Lastname: " + foundedPerson.getLastname());
                 System.out.println("************************************************************");
-                Main.menu();
+                frontService.menu();
                 break;
 
             }
-            else if (i == people.size()-1) {
+            else if (i == peopleList.size()-1) {
 
                 System.out.println("The person doesn't exist!.");
                 System.out.println("Press 1 to try again.");
@@ -183,53 +220,58 @@ public class PersonService {
                 int option = Integer.parseInt(sc.nextLine());
 
                 if (option == 1) {
-                    searchPeople(people);
+                    searchPeople();
                 } else if (option == 2) {
-                    Main.menu();
+                    frontService.menu();
                 }
                 else {
                     break;
                 }
             }
+        }*/
+
+        List<Person> foundedPeople = peopleList.stream().filter(p -> p.getId() == id).toList();
+
+        if (!foundedPeople.isEmpty()) {
+
+            System.out.println("****************************************************************************************************");
+            System.out.printf("%7s %15s %20s %20s %25s", "ID", "NAME", "LASTNAME", "PHONE", "EMAIL");
+            System.out.println("****************************************************************************************************");
+            System.out.println();
+
+            for (Person p : foundedPeople) {
+
+
+                    System.out.format("%10s %15s %20s %20s %25s",
+                            p.getId(), p.getName(), p.getLastname(), p.getPhone(), p.getEmail());
+                    System.out.println();
+                    System.out.println("****************************************************************************************************");
+
+            }
         }
 
+        frontService.submenu();
+
+
+
     }
 
-    public int getIndex(int id) {
+    public static List<Person> peopleList = new ArrayList<>();
+    public void loadList() {
 
-        int r = -1;
-
-        for (int i = 0; i < personsList.size(); i++) {
-
-            if (id == personsList.get(i).getId()) {
-
-                r = i;
-                break;
-            }
-            else if (i == personsList.size()-1){
-                System.err.println("The id doesn't exists!");
-            }
-        }
-
-        return r;
+        peopleList.add(new Person("Daenerys", "Targaryen", 22546124, 12027953213L, "daenerys@gmail.com"));
+        peopleList.add(new Person("Jon", "Snow", 54213456, 12064563059L, "jonsnow@gmail.com"));
+        peopleList.add(new Person("Catelyn", "Stark", 45645645, 12064512559L, "catelyn@gmail.com"));
+        peopleList.add(new Person("Khal", "Drogo", 8, 12011111213L, "khal@gmail.com"));
+        peopleList.add(new Person("Robb", "Stark", 5, 12064234239L,"robb@gmail.com"));
+        peopleList.add(new Person("Eddard", "Stark", 89778989, 12064514569L, "eddard@gmail.com"));
+        peopleList.add(new Person("Sansa", "Stark", 6, 12027953883L, "sansa@gmail.com"));
+        peopleList.add(new Person("Aria", "Stark", 7, 14327953213L, "aria@gmail.com"));
+        peopleList.add(new Person("Tyrion", "Lannister", 9, 19927953213L, "tyrion@gmail.com"));
+        peopleList.add(new Person("Cersei", "Lannister", 8, 14327958888L, "cersei@gmail.com"));
     }
-    public static List<Person> personsList = new ArrayList<>();
-    public static void loadList() {
-
-        personsList.add(new Person("Daenerys", "Targaryen", 1));
-        personsList.add(new Person("Jon", "Snow", 2));
-        personsList.add(new Person("Catelyn", "Stark", 3));
-        personsList.add(new Person("Eddard", "Stark", 4));
-        personsList.add(new Person("Robb", "Stark", 5));
-        personsList.add(new Person("Sansa", "Stark", 6));
-        personsList.add(new Person("Aria", "Stark", 7));
-        personsList.add(new Person("Khal", "Drogo", 8));
-        personsList.add(new Person("Tyrion", "Lannister", 9));
-        personsList.add(new Person("Cersei", "Lannister", 10));
-    }
-
     private static final Scanner sc = new Scanner(System.in);
-
+    private static final FrontService frontService = new FrontService();
 
 
 }

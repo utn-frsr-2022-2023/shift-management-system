@@ -1,22 +1,21 @@
 package system.models;
 
+import java.time.LocalDateTime;
+
 public class Shift {
 
-    private int day;
-    private Person person;
-
-    public Shift(int day, Person person) {
+    public Shift(LocalDateTime dateTime, Person person) {
 
         this.person = person;
-        this.day = day;
+        this.dateTime = dateTime;
     }
 
-    public int getDay() {
-        return day;
+    public LocalDateTime getDate() {
+        return dateTime;
     }
 
-    public void setDay(int day) {
-        this.day = day;
+    public void setDate(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public Person getPerson() {
@@ -28,5 +27,7 @@ public class Shift {
     }
 
 
+    private Person person;
+    private LocalDateTime dateTime;
 
 }

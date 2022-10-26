@@ -23,28 +23,41 @@ public class FrontService {
                    |  `.___.'
                          (""");
 
-        System.out.println("######################################################################");
-        System.out.println("\t\t\t\tWelcome to the shift system");
-        System.out.println("######################################################################");
-        System.out.print("\nPress 1 to continue: ");
-        option = sc.nextInt();
+        System.out.println("****************************************************************************************************");
+        System.out.println("\t\t\t\t\t\t\t\t\tWelcome to the shift system");
+        System.out.println("****************************************************************************************************");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+
+            e.printStackTrace();
+        }
+        welcomeFlag = false;
+        clear();
+
     }
+
     public  void menu(){
-        //clear();
+
+        if (welcomeFlag) {
+            welcome();
+        }
+
         do {
 
-            System.out.println("Enter an option below: \n1. Display shifts. " +
-                    "                                  \n2. Display people. " +
-                    "                                  \n3. Add shifts." +
-                    "                                  \n4. Add people." +
-                    "                                  \n5. Update shifts." +
-                    "                                  \n6. Update people." +
-                    "                                  \n7. Delete shifts." +
-                    "                                  \n8. Delete people." +
-                    "                                  \n9. Search shifts." +
-                    "                                 \n10. Search people." +
-                    "                                 \n11. Exit.");
+            System.out.println("****************************************************************************************************");
+            System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tMenu");
+            System.out.println("****************************************************************************************************");
+            System.out.println();
+            System.out.println("1. Display shifts.\t\t2. Display people. \t\t3. Add shifts. \t\t4. Add people.");
+            System.out.println("5. Update shifts. \t\t6. Update people. \t\t7. Delete shifts.\t8. Delete people.");
+            System.out.println("9. Search shifts. \t\t10. Search people. \t\t11. Exit.");
+            System.out.println();
+            System.out.print("Enter an option: ");
             option = sc.nextInt();
+
+            clear();
+
 
         } while (option < 1 || option >= 12);
 
@@ -53,10 +66,10 @@ public class FrontService {
             case 1: shiftService.displayShifts();
                 break;
 
-            case 2: personService.displayPeople(personService.getPersons());
+            case 2: personService.displayPeople();
                 break;
 
-            case 3: shiftService.addShift(personService.getPersons());
+            case 3: shiftService.addShift();
                 break;
 
             case 4: personService.addPeople();
@@ -64,19 +77,19 @@ public class FrontService {
             case 5: shiftService.updateShift();
                 break;
 
-            case 6: personService.updatePeople(personService.getPersons());
+            case 6: personService.updatePeople();
                 break;
 
             case 7: shiftService.deleteShift();
                 break;
 
-            case 8: personService.deletePeople(personService.getPersons());
+            case 8: personService.deletePeople();
                 break;
 
             case 9: shiftService.searchShifts();
                 break;
 
-            case 10 : personService.searchPeople(personService.getPersons());
+            case 10 : personService.searchPeople();
                 break;
 
             case 11: break;
@@ -86,12 +99,11 @@ public class FrontService {
 
     public  void submenu() {
 
-
-        int option;
+        clear();
 
         do {
-
-            System.out.println("1. Press 1 to return to the principal menu: ");
+            System.out.println();
+            System.out.println("\n1. Press 1 to return to the principal menu: ");
             System.out.println("2. Press 2 to exit");
             option = sc.nextInt();
 
@@ -117,8 +129,9 @@ public class FrontService {
     }
 
     private static int option;
+    private static boolean welcomeFlag = true;
     private static final Scanner sc = new Scanner(System.in);
-
     private static final PersonService personService = new PersonService();
     private static final ShiftService shiftService = new ShiftService();
+
 }
