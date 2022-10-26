@@ -5,9 +5,7 @@ import system.models.Shift;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ShiftService {
 
@@ -21,6 +19,8 @@ public class ShiftService {
 
         }
         else {
+
+            sortShifts();
 
             System.out.println("****************************************************************************************************");
             System.out.printf("%10s %25s %30s %25s", "ID", "NAME", "LASTNAME", "SHIFT");
@@ -274,7 +274,7 @@ public class ShiftService {
 
     }
 
-    public  void confirmShift(Shift shift) {
+    private void confirmShift(Shift shift) {
 
         LocalDateTime dateTimeNow = LocalDateTime.now();
         LocalDateTime dayPlus = dateTimeNow.plusHours(5);
@@ -284,6 +284,8 @@ public class ShiftService {
 
             System.out.println("The shift already exists! \nTry again...");
             addShift();
+
+            sortShifts();
         }
         else {
 
@@ -297,9 +299,20 @@ public class ShiftService {
 
     public void loadList() {
 
-        shiftList.add(new Shift(dateTime, personService.getPersons().get(1)));
+        shiftList.add(new Shift(LocalDateTime.of(2023, 10, 30, 10, 15) , personService.getPersons().get(1)));
+        shiftList.add(new Shift(LocalDateTime.of(2022, 11, 10, 10, 15) , personService.getPersons().get(2)));
+        shiftList.add(new Shift(LocalDateTime.of(2022, 10, 10, 10, 30), personService.getPersons().get(3)));
+        shiftList.add(new Shift(LocalDateTime.of(2022, 11, 10, 11, 15), personService.getPersons().get(4)));
+        shiftList.add(new Shift(LocalDateTime.of(2022, 12, 10, 10, 15), personService.getPersons().get(5)));
+        shiftList.add(new Shift(LocalDateTime.of(2022, 10, 10, 10, 10), personService.getPersons().get(6)));
+        shiftList.add(new Shift(LocalDateTime.of(2023, 1, 10, 10, 15), personService.getPersons().get(7)));
+
     }
 
+    private void sortShifts() {
+
+        shiftList.sort((o1, o2) -> o1.getDate().compareTo(o2.getDate()));
+    }
 
     public static List<Shift> shiftList = new ArrayList<>();
     private static final Scanner sc = new Scanner(System.in);

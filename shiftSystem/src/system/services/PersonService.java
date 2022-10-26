@@ -45,7 +45,6 @@ public class PersonService {
     public  void updatePeople(){
 
         Person personToUpdate;
-        int indexToUpdate;
 
         System.out.print("Enter the identification number: ");
         int id = Integer.parseInt(sc.nextLine());
@@ -90,9 +89,14 @@ public class PersonService {
         System.out.print("Enter the new name: ");
         personToUpdate.setName(sc.nextLine());
 
-
         System.out.print("Enter the new lastname: ");
         personToUpdate.setLastname(sc.nextLine());
+
+        System.out.print("Enter the new phone: ");
+        personToUpdate.setPhone(Long.parseLong(sc.nextLine()));
+
+        System.out.print("Enter the new email: ");
+        personToUpdate.setEmail(sc.nextLine().toLowerCase());
 
         System.out.println("The person has been updated!");
         System.out.println("Press 1 to return to the principal menu.");
@@ -151,7 +155,14 @@ public class PersonService {
 
 
 
-        if(peopleList.stream().anyMatch(p -> p.getId() == person.getId() && p.getName().equalsIgnoreCase(person.getName()) && p.getLastname().equalsIgnoreCase(person.getLastname()))){
+        if(peopleList
+                .stream()
+                .anyMatch(
+                             p->p.getId() == person.getId() &&
+                                p.getName().equalsIgnoreCase(person.getName()) &&
+                                p.getLastname().equalsIgnoreCase(person.getLastname()) &&
+                                p.getEmail().equalsIgnoreCase(person.getEmail()) &&
+                                p.getPhone() == person.getPhone())){
 
             System.out.println("The user already exists! \nTry again...");
             addPeople();
@@ -262,11 +273,11 @@ public class PersonService {
         peopleList.add(new Person("Daenerys", "Targaryen", 22546124, 12027953213L, "daenerys@gmail.com"));
         peopleList.add(new Person("Jon", "Snow", 54213456, 12064563059L, "jonsnow@gmail.com"));
         peopleList.add(new Person("Catelyn", "Stark", 45645645, 12064512559L, "catelyn@gmail.com"));
-        peopleList.add(new Person("Khal", "Drogo", 8, 12011111213L, "khal@gmail.com"));
-        peopleList.add(new Person("Robb", "Stark", 5, 12064234239L,"robb@gmail.com"));
+        peopleList.add(new Person("Khal", "Drogo", 84651321, 12011111213L, "khal@gmail.com"));
+        peopleList.add(new Person("Robb", "Stark", 5789457, 12064234239L,"robb@gmail.com"));
         peopleList.add(new Person("Eddard", "Stark", 89778989, 12064514569L, "eddard@gmail.com"));
-        peopleList.add(new Person("Sansa", "Stark", 6, 12027953883L, "sansa@gmail.com"));
-        peopleList.add(new Person("Aria", "Stark", 7, 14327953213L, "aria@gmail.com"));
+        peopleList.add(new Person("Sansa", "Stark", 68465456, 12027953883L, "sansa@gmail.com"));
+        peopleList.add(new Person("Aria", "Stark", 71235451, 14327953213L, "aria@gmail.com"));
         peopleList.add(new Person("Tyrion", "Lannister", 9, 19927953213L, "tyrion@gmail.com"));
         peopleList.add(new Person("Cersei", "Lannister", 8, 14327958888L, "cersei@gmail.com"));
     }

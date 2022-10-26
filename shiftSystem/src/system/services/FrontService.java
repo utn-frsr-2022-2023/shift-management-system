@@ -99,7 +99,7 @@ public class FrontService {
 
     public  void submenu() {
 
-        clear();
+        //clear();
 
         do {
             System.out.println();

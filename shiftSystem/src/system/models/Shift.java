@@ -26,8 +26,8 @@ public class Shift {
         this.person = person;
     }
 
-
     private Person person;
     private LocalDateTime dateTime;
+
 
 }
