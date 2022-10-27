@@ -26,10 +26,12 @@ public class PersonService {
         person.setLastname(sc.nextLine());
 
         System.out.print("Enter the identification number: ");
-        person.setId(Integer.parseInt(sc.nextLine()));
+        person.setId(sc.nextInt());
 
         System.out.print("Enter the phone number: ");
-        person.setPhone(Long.parseLong(sc.nextLine()));
+        person.setPhone(sc.nextLong());
+
+        sc.nextLine();
 
         System.out.print("Enter the email: ");
         person.setEmail(sc.nextLine());
@@ -195,6 +197,7 @@ public class PersonService {
                 System.out.println();
                 System.out.println("****************************************************************************************************");
             }
+
 
         }
         frontService.submenu();

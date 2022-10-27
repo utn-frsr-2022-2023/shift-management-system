@@ -6,6 +6,9 @@ import system.models.Shift;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class ShiftService {
 
@@ -31,8 +34,9 @@ public class ShiftService {
                 System.out.format("%10s %25s %30s %30s",
                         s.getPerson().getId(), s.getPerson().getName(), s.getPerson().getLastname(), s.getDate().format(formatter));
                 System.out.println();
+                System.out.println("****************************************************************************************************");
             }
-            System.out.println("****************************************************************************************************");
+
 
             frontService.submenu();
         }
@@ -50,8 +54,6 @@ public class ShiftService {
 
             System.out.print("Please enter the id: ");
             int id = sc.nextInt();
-
-
             System.out.print("Please enter the year: ");
             int year = sc.nextInt();
             System.out.print("Please enter the Month: ");
@@ -62,10 +64,25 @@ public class ShiftService {
             int hour = sc.nextInt();
             System.out.print("Please enter the minutes: ");
             int minutes = sc.nextInt();
+            
+            int i, index = 0;
+            
+            for(i = 0; i < personService.getPersons().size(); i++) {
+            	
+            	if (id == personService.getPersons().get(i).getId()) {
+            		
+            		index = i;
+            	}
+            }
 
+            /*List<Person> foundedPeople = personService.getPersons()
+            		.stream()
+            		.filter(p -> p.getId() == id)
+            		.collect(Collectors.toList()) -> A implementar*/
+            
             dateTime = LocalDateTime.of(year, month, day, hour, minutes);
 
-            Shift shift = new Shift(dateTime, personService.getPersons().get(id));
+            Shift shift = new Shift(dateTime, personService.getPersons().get(index));
 
             confirmShift(shift);
 
